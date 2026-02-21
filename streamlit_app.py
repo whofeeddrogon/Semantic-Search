@@ -272,3 +272,24 @@ st.markdown(
     '</div>',
     unsafe_allow_html=True,
 )
+
+# ── Sidebar: Admin Area ─────────────────────────────────
+with st.sidebar:
+    st.markdown("### ⚙️ Admin Panel")
+    st.markdown("Restore a Qdrant `.snapshot` file.")
+    
+    uploaded_file = st.file_uploader("Upload Snapshot", type=["snapshot"])
+    
+    if uploaded_file is not None:
+        if st.button("Restore Database"):
+            with st.spinner("Uploading and restoring... This may take a minute for large files."):
+                try:
+                    files = {"file": (uploaded_file.name, uploaded_file.getvalue(), "application/octet-stream")}
+                    res = requests.post(f"{API_URL}/upload_snapshot", files=files, timeout=120)
+                    
+                    if res.status_code == 200 and res.json().get("status") == "success":
+                        st.success("✅ Database restored successfully! Reload the page.")
+                    else:
+                        st.error(f"Failed: {res.text}")
+                except Exception as e:
+                    st.error(f"Error during upload: {e}")
