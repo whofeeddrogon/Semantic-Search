@@ -27,7 +27,7 @@ services:
     container_name: semantic_api
     command: python app.py
     ports:
-      - "18001:8000"
+      - "8001:8000"
     environment:
       - QDRANT_HOST=qdrant
       - TEI_URL=http://tei-server:80/embed
@@ -40,9 +40,9 @@ services:
     build: .
     image: semantic-app:latest
     container_name: semantic_ui
-    command: streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0
+    command: streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0 --server.enableCORS false --server.enableXsrfProtection false
     ports:
-      - "18501:8501"
+      - "8501:8501"
     environment:
       - API_URL=http://api:8000
     depends_on:
