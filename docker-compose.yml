@@ -16,7 +16,7 @@ services:
     container_name: tei-server
     command: --model-id BAAI/bge-m3
     ports:
-      - "8080:80"
+      - "9090:80"
     volumes:
       - tei-data:/data
     restart: unless-stopped
