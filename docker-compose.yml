@@ -23,6 +23,7 @@ services:
 
   api:
     build: .
+    image: semantic-app:latest
     container_name: semantic_api
     command: python app.py
     ports:
@@ -37,6 +38,7 @@ services:
 
   ui:
     build: .
+    image: semantic-app:latest
     container_name: semantic_ui
     command: streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0
     ports:
