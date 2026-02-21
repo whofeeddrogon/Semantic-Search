@@ -12,9 +12,9 @@ services:
     restart: unless-stopped
 
   tei-server:
-    image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.5
+    image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.2
     container_name: tei-server
-    command: --model-id BAAI/bge-m3
+    command: ["--model-id", "BAAI/bge-m3"]
     ports:
       - "9090:80"
     volumes:
