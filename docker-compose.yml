@@ -27,7 +27,7 @@ services:
     container_name: semantic_api
     command: python app.py
     ports:
-      - "8000:8000"
+      - "8001:8000"
     environment:
       - QDRANT_HOST=qdrant
       - TEI_URL=http://tei-server:80/embed
