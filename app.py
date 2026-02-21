@@ -25,7 +25,11 @@ import search_engine
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    model_loader.get_dense_model()      # pre-load dense model (BGE-M3)
+    if not config.USE_TEI:
+        model_loader.get_dense_model()      # pre-load dense model (BGE-M3) locally
+    else:
+        print(f"[app] Using remote TEI server: {config.TEI_URL}")
+        
     model_loader.get_sparse_model()     # pre-load sparse model (BM25)
     database_manager.ensure_collection()
     yield

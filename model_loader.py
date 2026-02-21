@@ -3,6 +3,7 @@ model_loader.py — Shared loader for Dense (BGE-M3) and Sparse (BM25) models.
 """
 
 import numpy as np
+import requests
 import config
 
 # Dense Model (SentenceTransformers)
@@ -50,16 +51,32 @@ def get_sparse_model():
 
 def encode_dense(texts: list[str], batch_size: int | None = None) -> np.ndarray:
     """Encode text into dense vectors (truncated if needed)."""
-    model = get_dense_model()
-    bs = batch_size or config.BATCH_SIZE
-    embeddings = model.encode(
-        texts,
-        batch_size=bs,
-        show_progress_bar=len(texts) > bs,
-        normalize_embeddings=True,
-        convert_to_numpy=True,
-    )
-    embeddings = embeddings.astype(np.float32)
+    if config.USE_TEI:
+        if isinstance(texts, str):
+            texts = [texts]
+            
+        try:
+            response = requests.post(
+                config.TEI_URL,
+                json={"inputs": texts},
+                timeout=30
+            )
+            response.raise_for_status()
+            embeddings = np.array(response.json(), dtype=np.float32)
+        except Exception as e:
+            print(f"[model_loader] TEI Server failed at {config.TEI_URL}. Error: {e}")
+            raise e
+    else:
+        model = get_dense_model()
+        bs = batch_size or config.BATCH_SIZE
+        embeddings = model.encode(
+            texts,
+            batch_size=bs,
+            show_progress_bar=len(texts) > bs,
+            normalize_embeddings=True,
+            convert_to_numpy=True,
+        )
+        embeddings = embeddings.astype(np.float32)
 
     # Truncate if larger (e.g. 1024 -> 512)
     if embeddings.shape[1] > config.EMBEDDING_DIM:

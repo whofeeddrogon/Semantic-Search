@@ -3,7 +3,12 @@ Central configuration for the Semantic Search Engine.
 All tunable parameters live here.
 """
 
+import os
 import torch
+
+# ── TEI (Text Embeddings Inference) ────────────────────
+USE_TEI = os.getenv("USE_TEI", "True").lower() in ("true", "1", "yes")
+TEI_URL = os.getenv("TEI_URL", "http://8.211.22.117:9090/embed")
 
 # ── Qdrant ──────────────────────────────────────────────
 QDRANT_HOST = "localhost"
