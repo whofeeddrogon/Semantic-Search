@@ -1,0 +1,12 @@
+torch
+sentence-transformers
+qdrant-client
+fastapi
+uvicorn[standard]
+streamlit
+plotly
+scikit-learn
+pandas
+numpy
+tqdm
+fastembed
