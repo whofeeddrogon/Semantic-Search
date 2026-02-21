@@ -11,7 +11,7 @@ USE_TEI = os.getenv("USE_TEI", "True").lower() in ("true", "1", "yes")
 TEI_URL = os.getenv("TEI_URL", "http://8.211.22.117:9090/embed")
 
 # ── Qdrant ──────────────────────────────────────────────
-QDRANT_HOST = "localhost"
+QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
 QDRANT_PORT = 6333
 COLLECTION_NAME = "products"
 

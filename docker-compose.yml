@@ -21,5 +21,31 @@ services:
       - tei-data:/data
     restart: unless-stopped
 
+  api:
+    build: .
+    container_name: semantic_api
+    command: python app.py
+    ports:
+      - "8000:8000"
+    environment:
+      - QDRANT_HOST=qdrant
+      - TEI_URL=http://tei-server:80/embed
+    depends_on:
+      - qdrant
+      - tei-server
+    restart: unless-stopped
+
+  ui:
+    build: .
+    container_name: semantic_ui
+    command: streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://api:8000
+    depends_on:
+      - api
+    restart: unless-stopped
+
 volumes:
   tei-data:
